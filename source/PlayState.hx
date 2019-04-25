@@ -15,16 +15,53 @@ class PlayState extends FlxState
 	
 	override public function create():Void
 	{
+		combatHud = new Combat();
+		add(combatHud);
 		super.create();
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
+		if (!isCombat){
+			//FlxG.collide();
+		} else {
+			if (!combatHud.visible){
+					health = combatHud.playerhealth;
+					if (combatHud.outcome == false){
+						ending = true;
+						//youlose TODO
+					} else { //you win
+						combatHud.e.kill();
+						if (combatHud.e.etype == 99){ //killed a boss
+							won = true;
+							ending = true;
+							//youwin TODO
+						} else { //killed a not boss
+							//idk confetti or something
+						}
+					}
+					isCombat = false; //alive or dead, we are out of combat
+			}
+		}
 	}
 	
 	public function placeThings(entityName:String):Void
 	{
 		
 	}
+	
+	function playerTouchEnemy(Pl:Player, En:Enemy):Void
+	{
+		startCombat(En);
+	}
+	
+	function startCombat(En:Enemy):Void
+	{
+		isCombat = true;
+		player.active = false;
+		combatHud.begin(health, En);
+	}
+	
 }
