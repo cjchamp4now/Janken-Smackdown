@@ -20,7 +20,7 @@ class PlayState extends FlxState
 		super.create();
 		
 		player = new Player(0, 0);
-		var testenemy = new Enemy(0, 0, 0);
+		var testenemy = new Enemy(0, 0, 99);
 		startCombat(testenemy);
 	}
 
@@ -44,6 +44,7 @@ class PlayState extends FlxState
 							//youwin TODO
 						} else { //killed a not boss
 							//idk confetti or something
+							
 						}
 					}
 					isCombat = false; //alive or dead, we are out of combat

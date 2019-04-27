@@ -23,6 +23,7 @@ class Enemy extends FlxSprite
 		if (enemytype != Etype){
 			enemytype = Etype;
 			//loadGraphic(); TODO
+			loadGraphic("assets/images/enemy" + enemytype + ".jpg", false);
 		}
 	}
 	
