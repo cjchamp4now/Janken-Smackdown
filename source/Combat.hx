@@ -1,8 +1,10 @@
 package;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.FlxG;
+import flixel.util.FlxColor;
 
 /**
  * ...
@@ -14,12 +16,10 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	public var playerHP(default, null):Int;
 	public var outcome(default, null):Bool; 
 	var wait:Bool = true;
-	var background:FlxSprite;
 	var enemySprite:Enemy;
 	
-	var _enemyHP:Int;
+	var enemyHP:Int;
 	
-	var attack:Int;
 	var enemyAttack:Int; //make random or set
 	
 	//var result:Bool;
@@ -29,18 +29,16 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	var pewpew:FlxText;
 	//var screen:FlxSprite;
 	
+	
+	var oof:FlxSound;
+	
 	public function new() 
 	{
 		super();
 		
-		background = new FlxSprite().makeGraphic(120, 120, FlxColor.RED);
-		background.drawRect(1, 1, 118, 44, FlxColor.BLACK);
-		background.drawRect(1, 46, 118, 73, FlxColor.BLACK);
-		background.screenCenter();
-		add(background); //basic black background with aborder
-		
 		//enemyimage
-		enemySprite = new Enemy(background.x + 50, background.y + 50, 0); //change location x+y
+		enemySprite = new Enemy(0, 0, 0); //change location x+y
+		enemySprite.screenCenter();
 		add(enemySprite);
 		
 		//enemyhealth
@@ -48,15 +46,19 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		enemyHP = 1; //change later in begin
 		
 		//attacks
-		attacksprite = new FlxSprite(background.x + 75, background.y + 75);
-		attacksprite.loadGraphic("assets/images/attacks.png", false, 100, 50);
+		attacksprite = new FlxSprite(0, 0);
+		attacksprite.loadGraphic("assets/images/attacks.jpeg", false, 100, 50);
+		attacksprite.screenCenter();
 		add(attacksprite);
 		
 		//TODO maybe add a indicator for damage or being damaged
-		pewpew = new FlxText(background.x + 100, background.y + 100, 200, "", 16);
+		pewpew = new FlxText(0, 0, 200, "", 16);
+		pewpew.color = FlxColor.BROWN;
 		pewpew.alignment = CENTER;
 		pewpew.visible = false;
 		add(pewpew);
+		
+		oof = FlxG.sound.load("assets/sounds/oof.wav");
 		
 		active = false;
 		visible = false;
@@ -81,27 +83,132 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		theEnemy = En;
 		
 		//update player health on screen TODO
-		_enemyHP = ((En.enemytype % 2) + 1);
+		enemyHP = ((En.enemytype % 2) + 2);
 		enemySprite.changetypeofenemy(En.enemytype);
 		
 		wait = true;
 		pewpew.text = "";
 		pewpew.visible = false;
 		
+		visible = true;
+		active = true;
+		wait = false;
 		
+	}
+	
+	function activatecombat(_):Void
+	{
+		active = true;
+		wait = false;
+		//begin battle music
+	}
+	
+	function endcombat(_):Void
+	{
+		active = false;
+		visible = false;
 	}
 	
 	override public function update(elapsed:Float):Void
 	{
 		if (!wait)
 		{
-			var z:Bool = false; //rock
-			var x:Bool = false; //paper
-			var c:Bool = false; //scissors
-			var v:Bool = false; //random
+			var rock:Bool = false; //rock
+			var paper:Bool = false; //paper
+			var scissor:Bool = false; //scissors
+			var random:Bool = false; //random
 			
 			//if(FlxG.keys.justPressed("Z")) TODO
+			if (FlxG.keys.anyJustReleased([Z, ONE]))
+			{
+				rock = true;
+			}
+			else if (FlxG.keys.anyJustReleased([X, TWO]))
+			{
+				paper = true;
+			}
+			else if (FlxG.keys.anyJustReleased([C, THREE]))
+			{
+				scissor = true;
+			} 
+			else if (FlxG.keys.anyJustReleased([V, FOUR])){
+				random = true;
+			}
+			
+			if (rock){
+				attack(0);
+			} else if (paper){
+				attack(1);
+			} else if (scissor){
+				attack(2);
+			} else if (random){
+				attack(3);
+			}
+			
+			
+			
+			
+			
+		}
+		super.update(elapsed);
+	}
+	
+	function attack(select:Int):Void
+	{
+		var enemyattack:Int;
+		enemyattack = FlxG.random.int(0, 2);
+		if (select == 3){
+			select = FlxG.random.int(0, 2);
+		}
+		switch(select)
+		{
+			case 0:
+				if (enemyattack == 1){ //rock vs paper enemy wins
+					playerHP--;
+				} else if (enemyattack == 2){ //rock vs scis player wins
+					enemyHP--;
+				} else { //draw
+					//play dud sound
+				}
+			
+			case 1:
+				if (enemyattack == 2){ //paper vs scis enemy wins
+					playerHP--;
+				} else if (enemyattack == 0){ //paper vs rock player wins
+					enemyHP--;
+				} else { //draw
+					//play dud sound
+				}
+				
+			case 2:
+				if (enemyattack == 0){ //rock vs scis enemy wins
+					playerHP--;
+				} else if (enemyattack == 1){ //paper vs scis player wins
+					enemyHP--;
+				} else { //draw
+					//play dud sound
+				}
+		}
+		
+		oof.play();
+		
+		wait = true;
+		if (playerHP <= 0){
+			//death sound
+			pewpew.text = "Ded";
+			pewpew.visible = true;
+			outcome = false;
+			//end combat
+		} else if (enemyHP <= 0){
+			//enemy death sound
+			pewpew.text = "Win";
+			pewpew.visible = true;
+			outcome = true;
+			//end combat
+		} else {
+			wait = false;
 		}
 	}
+	
 	
 }

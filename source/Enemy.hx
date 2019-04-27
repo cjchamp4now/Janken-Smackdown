@@ -15,7 +15,7 @@ class Enemy extends FlxSprite
 	{
 		super(X, Y);
 		enemytype = Etype;
-		loadGraphic("assets/images/enemy" + etype + "png", false);
+		loadGraphic("assets/images/enemy" + enemytype + ".jpg", false);
 		
 	}
 	

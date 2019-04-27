@@ -18,6 +18,10 @@ class PlayState extends FlxState
 		combatHud = new Combat();
 		add(combatHud);
 		super.create();
+		
+		player = new Player(0, 0);
+		var testenemy = new Enemy(0, 0, 0);
+		startCombat(testenemy);
 	}
 
 	override public function update(elapsed:Float):Void
@@ -28,13 +32,13 @@ class PlayState extends FlxState
 			//FlxG.collide();
 		} else {
 			if (!combatHud.visible){
-					health = combatHud.playerhealth;
+					health = combatHud.playerHP;
 					if (combatHud.outcome == false){
 						ending = true;
 						//youlose TODO
 					} else { //you win
-						combatHud.e.kill();
-						if (combatHud.e.etype == 99){ //killed a boss
+						combatHud.theEnemy.kill();
+						if (combatHud.theEnemy.enemytype == 99){ //killed a boss
 							won = true;
 							ending = true;
 							//youwin TODO
