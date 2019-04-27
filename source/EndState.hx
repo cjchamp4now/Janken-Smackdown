@@ -6,7 +6,7 @@ import flixel.FlxState;
  * ...
  * @author Cory Jackson
  */
-class LoseState extends FlxState 
+class EndState extends FlxState 
 {
 
 	public function new() 
