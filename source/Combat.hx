@@ -145,10 +145,6 @@ class Combat extends FlxTypedGroup<FlxSprite>
 				attack(3);
 			}
 			
-			
-			
-			
-			
 		}
 		super.update(elapsed);
 	}
@@ -199,12 +195,14 @@ class Combat extends FlxTypedGroup<FlxSprite>
 			pewpew.visible = true;
 			outcome = false;
 			//end combat
+			this.visible = false;
 		} else if (enemyHP <= 0){
 			//enemy death sound
 			pewpew.text = "Win";
 			pewpew.visible = true;
 			outcome = true;
 			//end combat
+			this.visible = false;
 		} else {
 			wait = false;
 		}

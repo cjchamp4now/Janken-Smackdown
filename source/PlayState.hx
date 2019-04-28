@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxState;
 
 class PlayState extends FlxState
@@ -8,7 +9,7 @@ class PlayState extends FlxState
 	var health:Int = 4;
 	var isCombat:Bool = false;
 	var combatHud:Combat;
-	var ending:Bool;
+	var ending:Bool = false;
 	var won:Bool;
 	
 	
@@ -17,9 +18,12 @@ class PlayState extends FlxState
 	{
 		combatHud = new Combat();
 		add(combatHud);
+		player = new Player(0, 0);
+		
+		
 		super.create();
 		
-		player = new Player(0, 0);
+
 		var testenemy = new Enemy(0, 0, 99);
 		startCombat(testenemy);
 	}
@@ -27,6 +31,10 @@ class PlayState extends FlxState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
+		if (ending){
+			return;
+		}
 		
 		if (!isCombat){
 			//FlxG.collide();
@@ -36,18 +44,23 @@ class PlayState extends FlxState
 					if (combatHud.outcome == false){
 						ending = true;
 						//youlose TODO
+						won = false;
+						FlxG.switchState(new EndState(won));
+						
 					} else { //you win
 						combatHud.theEnemy.kill();
 						if (combatHud.theEnemy.enemytype == 99){ //killed a boss
 							won = true;
 							ending = true;
+							FlxG.switchState(new EndState(won));
 							//youwin TODO
 						} else { //killed a not boss
 							//idk confetti or something
 							
 						}
+						isCombat = false;
+						//make player and enmies active again
 					}
-					isCombat = false; //alive or dead, we are out of combat
 			}
 		}
 	}
