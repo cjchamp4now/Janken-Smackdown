@@ -20,10 +20,8 @@ class PlayState extends FlxState
 		add(combatHud);
 		player = new Player(0, 0);
 		
-		
 		super.create();
 		
-
 		var testenemy = new Enemy(0, 0, 99);
 		startCombat(testenemy);
 	}

@@ -27,10 +27,18 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	var attacksprite:FlxSprite;
 	
 	var pewpew:FlxText;
+	var pewpart1:String;
+	var pewpart2:String;
+	var pewpart3:String;
+	
+	var healths:FlxText;
+	
 	//var screen:FlxSprite;
 	
 	
 	var oof:FlxSound;
+	var ouch:FlxSound;
+	var tink:FlxSound;
 	
 	public function new() 
 	{
@@ -47,18 +55,25 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		
 		//attacks
 		attacksprite = new FlxSprite(0, 0);
-		attacksprite.loadGraphic("assets/images/attacks.jpeg", false, 100, 50);
+		attacksprite.loadGraphic("assets/images/attacks.jpeg", false, FlxG.width, FlxG.height);
 		attacksprite.screenCenter();
 		add(attacksprite);
 		
 		//TODO maybe add a indicator for damage or being damaged
-		pewpew = new FlxText(0, 0, 200, "", 16);
-		pewpew.color = FlxColor.BROWN;
+		pewpew = new FlxText((FlxG.width / 4), 0, (FlxG.width / 2), "", 16);
+		pewpew.color = FlxColor.RED;
 		pewpew.alignment = CENTER;
 		pewpew.visible = false;
 		add(pewpew);
 		
+		healths = new FlxText(0, 0, (FlxG.width / 4), "", 16);
+		healths.color = FlxColor.PINK;
+		healths.alignment = CENTER;
+		add(healths);
+		
 		oof = FlxG.sound.load("assets/sounds/oof.wav");
+		ouch = FlxG.sound.load("assets/sounds/ouch.wav");
+		tink = FlxG.sound.load("assets/sounds/tink.wav");
 		
 		active = false;
 		visible = false;
@@ -85,10 +100,13 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		//update player health on screen TODO
 		enemyHP = ((En.enemytype % 2) + 2);
 		enemySprite.changetypeofenemy(En.enemytype);
+		enemySprite.screenCenter();
 		
 		wait = true;
 		pewpew.text = "";
 		pewpew.visible = false;
+		
+		healths.text = "Player: " + playerHP + ", enemy: " + enemyHP;
 		
 		visible = true;
 		active = true;
@@ -149,6 +167,56 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		super.update(elapsed);
 	}
 	
+	function displayDamage(play:Int, enem:Int, res:Int):Void
+	{
+		if (play == 0){ //rock
+			pewpart1 = "rock";
+		} else if(play == 1) { //paper
+			pewpart1 = "paper";
+		} else{ //sc
+			pewpart1 = "scissors";
+		}
+		
+		if (enem == 0){ //rock
+			pewpart2 = "rock";
+		} else if(enem == 1) { //paper
+			pewpart2 = "paper";
+		} else{ //sc
+			pewpart2 = "scissors";
+		}
+		
+		if (res == 0){ //lost
+			pewpart3 = "Player lost!";
+		} else if(res == 1) { //won
+			pewpart3 = "Player Won!";
+		} else{ //draw
+			pewpart3 = "Draw!";
+		}
+		
+		pewpew.text = "Player did: " + pewpart1 + ", enemy did: " + pewpart2 + ". Result: " + pewpart3;
+		pewpew.visible = true;
+		healths.text = "Player: " + playerHP + ", enemy: " + enemyHP;
+	}
+	
+	function playerHit(play:Int, enem:Int):Void
+	{
+		playerHP--;
+		oof.play();
+		displayDamage(play, enem, 0);
+	}
+	
+	function enemyHit(play:Int, enem:Int):Void
+	{
+		enemyHP--;
+		ouch.play();
+		displayDamage(play, enem, 1);
+	}
+	
+	function drawAttack(play:Int, enem:Int):Void
+	{
+		tink.play();
+		displayDamage(play, enem, 2);
+	}
 	function attack(select:Int):Void
 	{
 		var enemyattack:Int;
@@ -160,53 +228,53 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		{
 			case 0:
 				if (enemyattack == 1){ //rock vs paper enemy wins
-					playerHP--;
+					playerHit(select, enemyattack);
 				} else if (enemyattack == 2){ //rock vs scis player wins
-					enemyHP--;
+					enemyHit(select, enemyattack);
 				} else { //draw
-					//play dud sound
+					drawAttack(select, enemyattack);
 				}
 			
 			case 1:
 				if (enemyattack == 2){ //paper vs scis enemy wins
-					playerHP--;
+					playerHit(select, enemyattack);
 				} else if (enemyattack == 0){ //paper vs rock player wins
-					enemyHP--;
+					enemyHit(select, enemyattack);
 				} else { //draw
-					//play dud sound
+					drawAttack(select, enemyattack);
 				}
 				
 			case 2:
 				if (enemyattack == 0){ //rock vs scis enemy wins
-					playerHP--;
+					playerHit(select, enemyattack);
 				} else if (enemyattack == 1){ //paper vs scis player wins
-					enemyHP--;
+					enemyHit(select, enemyattack);
 				} else { //draw
-					//play dud sound
+					drawAttack(select, enemyattack);
 				}
 		}
 		
-		oof.play();
-		
 		wait = true;
 		if (playerHP <= 0){
-			//death sound
-			pewpew.text = "Ded";
-			pewpew.visible = true;
-			outcome = false;
-			//end combat
-			this.visible = false;
+			playerDed();
 		} else if (enemyHP <= 0){
-			//enemy death sound
-			pewpew.text = "Win";
-			pewpew.visible = true;
-			outcome = true;
-			//end combat
-			this.visible = false;
+			enemyDed();
 		} else {
 			wait = false;
 		}
 	}
 	
+	function playerDed():Void
+	{
+		outcome = false;
+		//end combat
+		this.visible = false;
+	}
 	
+	function enemyDed():Void
+	{
+		outcome = true;
+		//end combat
+		this.visible = false;
+	}
 }

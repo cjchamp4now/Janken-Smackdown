@@ -27,12 +27,12 @@ class EndState extends FlxState
 		FlxG.mouse.visible = false;
 		finalImage = new FlxSprite(0, 0);
 		if (didWin){
-			finalImage.loadGraphic("assets/images/win.jpg");
-			finalMessage = new FlxText(0, 0, 16, "You won!", 24);
+			finalImage.loadGraphic("assets/images/win.jpg", false, FlxG.width, FlxG.height);
+			finalMessage = new FlxText(0, 0, FlxG.width, "You won!", 24);
 			
 		} else {
-			finalImage.loadGraphic("assets/images/lose.jpg");
-			finalMessage = new FlxText(0, 0, 16, "You lost~", 24);
+			finalImage.loadGraphic("assets/images/lose.jpg", false, FlxG.width, FlxG.height);
+			finalMessage = new FlxText(0, 0, FlxG.width, "You lost~", 24);
 		}
 		finalImage.screenCenter();
 		finalMessage.alignment = CENTER;

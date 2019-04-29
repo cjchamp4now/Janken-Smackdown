@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
@@ -15,7 +16,7 @@ class Enemy extends FlxSprite
 	{
 		super(X, Y);
 		enemytype = Etype;
-		loadGraphic("assets/images/enemy" + enemytype + ".jpg", false);
+		loadGraphic("assets/images/enemy" + enemytype + ".jpg", false, FlxG.width, FlxG.height);
 		
 	}
 	
@@ -23,7 +24,7 @@ class Enemy extends FlxSprite
 		if (enemytype != Etype){
 			enemytype = Etype;
 			//loadGraphic(); TODO
-			loadGraphic("assets/images/enemy" + enemytype + ".jpg", false);
+			loadGraphic("assets/images/enemy" + enemytype + ".jpg", false, FlxG.width, FlxG.height);
 		}
 	}
 	
