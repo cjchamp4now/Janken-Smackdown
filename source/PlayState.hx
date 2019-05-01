@@ -1,7 +1,10 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxState;
+import flixel.addons.editors.ogmo.FlxOgmoLoader;
+import flixel.tile.FlxTilemap;
 
 class PlayState extends FlxState
 {
@@ -12,23 +15,37 @@ class PlayState extends FlxState
 	var ending:Bool = false;
 	var won:Bool;
 	
-	
+	var map:FlxOgmoLoader;
+	var Walls:FlxTilemap;
 	
 	override public function create():Void
 	{
-		combatHud = new Combat();
-		add(combatHud);
-		player = new Player(0, 0);
+		map = new FlxOgmoLoader("assets/data/map.oel"); //cant install editor in class will do at home PC, change this to correct file name
+		Walls = map.loadTilemap("assets/images/walltile.jpg", 16, 16, "walls");
+		Walls.follow();
+		Walls.setTileProperties(1, FlxObject.NONE);
+		Walls.setTileProperties(2, FlxObject.ANY);
+		//Walls.setTileProperties(3, FlxObject.ANY);
+		add(Walls);
+		
+		player = new Player();
+		map.loadEntities(placeThings, "entities");
+		add(player);
+		
+		//combatHud = new Combat();
+		//add(combatHud);
+
 		
 		super.create();
 		
-		var testenemy = new Enemy(0, 0, 99);
-		startCombat(testenemy);
+		//var testenemy = new Enemy(0, 0, 99);
+		//startCombat(testenemy);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		FlxG.collide(player, Walls);
 		
 		if (ending){
 			return;
@@ -63,9 +80,15 @@ class PlayState extends FlxState
 		}
 	}
 	
-	public function placeThings(entityName:String):Void
+	function placeThings(entityName:String, entityData:Xml):Void
 	{
-		
+		var x:Int = Std.parseInt(entityData.get("x"));
+		var y:Int = Std.parseInt(entityData.get("y"));
+		if (entityName == "player")
+		{
+			player.x = x;
+			player.y = y;
+		}
 	}
 	
 	function playerTouchEnemy(Pl:Player, En:Enemy):Void
@@ -79,5 +102,7 @@ class PlayState extends FlxState
 		player.active = false;
 		combatHud.begin(health, En);
 	}
+	
+	
 	
 }
