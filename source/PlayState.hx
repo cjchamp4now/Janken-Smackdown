@@ -20,11 +20,11 @@ class PlayState extends FlxState
 	
 	override public function create():Void
 	{
-		map = new FlxOgmoLoader("assets/data/map.oel"); //cant install editor in class will do at home PC, change this to correct file name
-		Walls = map.loadTilemap("assets/images/walltile.jpg", 16, 16, "walls");
+		map = new FlxOgmoLoader("assets/data/map.oel");
+		Walls = map.loadTilemap("assets/images/walltile.png", 16, 16, "wall");
 		Walls.follow();
-		Walls.setTileProperties(1, FlxObject.NONE);
-		Walls.setTileProperties(2, FlxObject.ANY);
+		Walls.setTileProperties(0, FlxObject.NONE);
+		Walls.setTileProperties(1, FlxObject.ANY);
 		//Walls.setTileProperties(3, FlxObject.ANY);
 		add(Walls);
 		
