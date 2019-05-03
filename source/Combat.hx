@@ -98,7 +98,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		theEnemy = En;
 		
 		//update player health on screen TODO
-		enemyHP = ((En.enemytype % 2) + 2);
+		enemyHP = ((En.enemytype % 2) + 1);
 		enemySprite.changetypeofenemy(En.enemytype);
 		enemySprite.screenCenter();
 		
