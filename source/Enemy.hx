@@ -16,16 +16,14 @@ class Enemy extends FlxSprite
 	{
 		super(X, Y);
 		enemytype = Etype;
-		loadGraphic("assets/images/enemy" + enemytype + ".jpg", false, FlxG.width, FlxG.height);
+		loadGraphic("assets/images/enemysprite" + enemytype + ".jpg", false, 16, 16);
 		
 	}
 	
 	public function changetypeofenemy(Etype:Int):Void{
-		if (enemytype != Etype){
 			enemytype = Etype;
 			//loadGraphic(); TODO
 			loadGraphic("assets/images/enemy" + enemytype + ".jpg", false, FlxG.width, FlxG.height);
-		}
 	}
 	
 	
