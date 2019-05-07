@@ -19,11 +19,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	var enemySprite:Enemy;
 	
 	var enemyHP:Int;
-	
-	var enemyAttack:Int; //make random or set
-	
-	//var result:Bool;
-	
+	var enemyAttack:Int;
 	var attacksprite:FlxSprite;
 	
 	var pewpew:FlxText;
@@ -32,9 +28,6 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	var pewpart3:String;
 	
 	var healths:FlxText;
-	
-	//var screen:FlxSprite;
-	
 	
 	var oof:FlxSound;
 	var ouch:FlxSound;
@@ -49,8 +42,6 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		enemySprite.screenCenter();
 		add(enemySprite);
 		
-		//enemyhealth
-		//do you really need to actually know tho?
 		enemyHP = 1; //change later in begin
 		
 		//attacks
@@ -77,11 +68,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		
 		active = false;
 		visible = false;
-		
-		//TODO load sound effects
-		//soundHURT = FlxG.sound.load(AssetPaths.oof__wav);
 	}
-	
 	
 	/**
 	 * 
@@ -90,10 +77,6 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	 */
 	public function begin(playHP:Int, En:Enemy):Void
 	{
-		//screen.drawFrame();
-		
-		//playcombat musicz TODO
-		
 		playerHP = playHP;
 		theEnemy = En;
 		
@@ -111,14 +94,12 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		visible = true;
 		active = true;
 		wait = false;
-		
 	}
 	
 	function activatecombat(_):Void
 	{
 		active = true;
 		wait = false;
-		//begin battle music
 	}
 	
 	function endcombat(_):Void
@@ -131,38 +112,22 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	{
 		if (!wait)
 		{
-			var rock:Bool = false; //rock
-			var paper:Bool = false; //paper
-			var scissor:Bool = false; //scissors
-			var random:Bool = false; //random
-			
-			//if(FlxG.keys.justPressed("Z")) TODO
-			if (FlxG.keys.anyJustReleased([Z, ONE]))
+			if (FlxG.keys.anyJustReleased([Z, ONE])) //rock
 			{
-				rock = true;
+				attack(0);
 			}
-			else if (FlxG.keys.anyJustReleased([X, TWO]))
+			else if (FlxG.keys.anyJustReleased([X, TWO])) //paper
 			{
-				paper = true;
+				attack(1);
 			}
 			else if (FlxG.keys.anyJustReleased([C, THREE]))
 			{
-				scissor = true;
-			} 
-			else if (FlxG.keys.anyJustReleased([V, FOUR])){
-				random = true;
-			}
-			
-			if (rock){
-				attack(0);
-			} else if (paper){
-				attack(1);
-			} else if (scissor){
 				attack(2);
-			} else if (random){
+			} 
+			else if (FlxG.keys.anyJustReleased([V, FOUR])) //random
+			{ 
 				attack(3);
 			}
-			
 		}
 		super.update(elapsed);
 	}

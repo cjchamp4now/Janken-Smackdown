@@ -27,7 +27,6 @@ class PlayState extends FlxState
 		Walls.follow();
 		Walls.setTileProperties(0, FlxObject.NONE);
 		Walls.setTileProperties(1, FlxObject.ANY);
-		//Walls.setTileProperties(3, FlxObject.ANY);
 		add(Walls);
 		
 		allEnemies = new FlxTypedGroup<Enemy>();
@@ -40,17 +39,12 @@ class PlayState extends FlxState
 		combatHud = new Combat();
 		add(combatHud);
 
-		
 		super.create();
-		
-		//var testenemy = new Enemy(0, 0, 99);
-		//startCombat(testenemy);
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
-		
 		
 		if (ending){
 			return;
@@ -64,7 +58,6 @@ class PlayState extends FlxState
 					health = combatHud.playerHP;
 					if (combatHud.outcome == false){
 						ending = true;
-						//youlose TODO
 						won = false;
 						FlxG.switchState(new EndState(won));
 						
@@ -74,13 +67,10 @@ class PlayState extends FlxState
 							won = true;
 							ending = true;
 							FlxG.switchState(new EndState(won));
-							//youwin TODO
 						} else { //killed a not boss
-							//idk confetti or something
-							
+							//idk confetti or something//////////////////////////////
 						}
 						isCombat = false;
-						//make player and enmies active again
 						player.active = true;
 					}
 			}
@@ -114,7 +104,4 @@ class PlayState extends FlxState
 		player.active = false;
 		combatHud.begin(health, En);
 	}
-	
-	
-	
 }

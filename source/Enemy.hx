@@ -17,7 +17,6 @@ class Enemy extends FlxSprite
 		super(X, Y);
 		enemytype = Etype;
 		loadGraphic("assets/images/enemysprite" + enemytype + ".jpg", false, 16, 16);
-		
 	}
 	
 	public function changetypeofenemy(Etype:Int):Void{
@@ -25,7 +24,4 @@ class Enemy extends FlxSprite
 			//loadGraphic(); TODO
 			loadGraphic("assets/images/enemy" + enemytype + ".jpg", false, FlxG.width, FlxG.height);
 	}
-	
-	
-	
 }
