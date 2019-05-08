@@ -20,7 +20,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	
 	var enemyHP:Int;
 	var enemyAttack:Int;
-	var attacksprite:FlxSprite;
+	//var attacksprite:FlxSprite;
 	
 	var pewpew:FlxText;
 	var pewpart1:String;
@@ -45,12 +45,12 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		enemyHP = 1; //change later in begin
 		
 		//attacks
-		attacksprite = new FlxSprite(0, 0);
-		attacksprite.loadGraphic("assets/images/attacks.jpeg", false, FlxG.width, FlxG.height);
-		attacksprite.screenCenter();
-		add(attacksprite);
+		//attacksprite = new FlxSprite(0, 0);
+		//attacksprite.loadGraphic("assets/images/attacks.jpeg", false, FlxG.width, FlxG.height);
+		//attacksprite.screenCenter();
+		//add(attacksprite);
 		
-		//TODO maybe add a indicator for damage or being damaged
+		//an indicator for damage or being damaged
 		pewpew = new FlxText((FlxG.width / 4), 0, (FlxG.width / 2), "", 16);
 		pewpew.color = FlxColor.RED;
 		pewpew.alignment = CENTER;
@@ -58,7 +58,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 		add(pewpew);
 		
 		healths = new FlxText(0, 0, (FlxG.width / 4), "", 16);
-		healths.color = FlxColor.PINK;
+		healths.color = FlxColor.ORANGE;
 		healths.alignment = CENTER;
 		add(healths);
 		

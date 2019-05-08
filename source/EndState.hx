@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
-import flixel.text.FlxText;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -13,8 +13,8 @@ class EndState extends FlxState
 {
 	var didWin:Bool;
 	var finalImage:FlxSprite;
-	var finalMessage:FlxText;
 	
+	var finalsound:FlxSound;
 	
 	public function new(Result:Bool) 
 	{
@@ -28,18 +28,14 @@ class EndState extends FlxState
 		finalImage = new FlxSprite(0, 0);
 		if (didWin){
 			finalImage.loadGraphic("assets/images/win.jpg", false, FlxG.width, FlxG.height);
-			finalMessage = new FlxText(0, 0, FlxG.width, "You won!", 24);
-			
+			finalsound = FlxG.sound.load("assets/sounds/win.wav");
+			finalsound.play();
 		} else {
 			finalImage.loadGraphic("assets/images/lose.jpg", false, FlxG.width, FlxG.height);
-			finalMessage = new FlxText(0, 0, FlxG.width, "You lost~", 24);
+			finalsound = FlxG.sound.load("assets/sounds/lose.wav");
+			finalsound.play();
 		}
 		finalImage.screenCenter();
-		finalMessage.alignment = CENTER;
-		finalMessage.screenCenter();
 		add(finalImage);
-		add(finalMessage);
-		
-		
 	}
 }

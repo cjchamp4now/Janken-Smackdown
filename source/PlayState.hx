@@ -5,6 +5,7 @@ import flixel.FlxObject;
 import flixel.FlxState;
 import flixel.addons.editors.ogmo.FlxOgmoLoader;
 import flixel.group.FlxGroup.FlxTypedGroup;
+import flixel.system.FlxSound;
 import flixel.tile.FlxTilemap;
 
 class PlayState extends FlxState
@@ -19,6 +20,8 @@ class PlayState extends FlxState
 	var map:FlxOgmoLoader;
 	var Walls:FlxTilemap;
 	var allEnemies:FlxTypedGroup<Enemy>;
+	
+	var notdead:FlxSound;
 	
 	override public function create():Void
 	{
@@ -39,6 +42,8 @@ class PlayState extends FlxState
 		combatHud = new Combat();
 		add(combatHud);
 
+		notdead = FlxG.sound.load("assets/sounds/yay.wav");
+		
 		super.create();
 	}
 
@@ -68,7 +73,7 @@ class PlayState extends FlxState
 							ending = true;
 							FlxG.switchState(new EndState(won));
 						} else { //killed a not boss
-							//idk confetti or something//////////////////////////////
+							notdead.play();
 						}
 						isCombat = false;
 						player.active = true;

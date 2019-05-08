@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxPoint;
+import flixel.system.FlxSound;
 
 /**
  * ...
@@ -12,19 +13,18 @@ import flixel.math.FlxPoint;
 class Player extends FlxSprite 
 {
 	public var speed:Float = 150;
-	//maybe sound for walking
+	var walk:FlxSound;
+	
 	public function new(X:Float=0, Y:Float=0) 
 	{
 		super(X, Y);
 		
-		//need a graphic for player sprite
 		loadGraphic("assets/images/player.jpeg", false, 16, 16);
 		drag.x = drag.y = 1000;
-		//maybe animation
-		setSize(12, 10);
+		//maybe animation //nah
+		setSize(8, 8);
 		offset.set(6, 2);
-		
-		//sound load
+		walk = FlxG.sound.load("assets/sounds/walk.wav");
 	}
 	
 	function move():Void
@@ -39,7 +39,7 @@ class Player extends FlxSprite
 		left = FlxG.keys.anyPressed([LEFT, A]);
 		right = FlxG.keys.anyPressed([RIGHT, D]);
 		
-		if (up && down){ //add null movement later
+		if (up && down){ //add null movement later //nah
 			up = down = false;
 		}
 		if (left && right){
@@ -73,9 +73,8 @@ class Player extends FlxSprite
 			
 			if ((velocity.x != 0 || velocity.y != 0) && touching == FlxObject.NONE)
 			{
-				//walk sound play
-				
-				//animation stuff
+				walk.play();
+				//animation stuff //nah
 			}
 		}
 	}
