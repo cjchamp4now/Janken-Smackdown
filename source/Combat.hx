@@ -240,6 +240,7 @@ class Combat extends FlxTypedGroup<FlxSprite>
 	{
 		outcome = true;
 		//end combat
+		playerHP++;
 		this.visible = false;
 	}
 }
